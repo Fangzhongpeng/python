@@ -6,13 +6,16 @@ cs 游戏角色类代码分解
 
 
 class Role():
-    def __init__(self, name, role, weapon, life_value=100, money=15000):
+    def __init__(self, name, role, weapon, life_value=100, money=15000): #构造函数
         self.name = name       #角色的名字
         self.role = role       #角色是警察还是恐怖分子
         self.weapon = weapon   #角色的武器
-        self.life_value = life_value   #角色的生命值
+        self.__life_value = life_value   #角色的生命值,     私有属性
         self.money = money     #角色的钱
-
+    def show_status(self):
+        print("name:%s weapon:%s life_val:%s" %(self.name,self.weapon,self.__life_value))  #类的内部可以调用私有属性
+    def __del__(self):               #析构函数
+        print("%s 彻底死了"  %self.name)
     def shot(self):
         #射击
         print("shooting...")
@@ -20,13 +23,21 @@ class Role():
     def got_shot(self):
         #中枪
         print("ah...,I got shot...")
+        self.__life_value-=51
 
     def buy_gun(self, gun_name):
         #买武器
         print(" %s just bought %s" %(self.name, gun_name))
 
 
-r1 = Role('Alex', 'police', 'AK47')   """
+r1 = Role('Alex', 'police', 'AK47')
+r1.buy_gun("kkk")
+r1.got_shot()
+print(r1.weapon)
+print(r1.show_status())
+#print(r1.life_value)     #类的外部不可以调用私有属性
+
+"""
         生成一个角色   ,类的实例化，初始化一个类，造了一个对象,这个过程相当于
         Role.__init__(***) 
     
@@ -48,12 +59,26 @@ r1 = Role('Alex', 'police', 'AK47')   """
     其存储到变量name中，然后该变量被关联到当前创建的实例。self.age = age的作用与此类似。
 """
 
-r2 = Role('Jack', 'terrorist', 'B22')   # 生成一个角色
-r1.buy_gun("AK44")
+#r2 = Role('Jack', 'terrorist', 'B22')   # 生成一个角色
+#r1.buy_gun("AK44")
 
-""" __init__  构造函数
+""" 
+__init__  构造函数
 实例化一个类的时候如果想实例传参数，必须在__init__里边定义，在实例化的时候做一些类的初始化的工作   def  __init__(***) 
 就是一个初始化的过程
 
 
+"""
+
+
+"""
+应用场景
+
+在实际开发中，对象 的 某些属性或方法 可能只希望 在对象的内部被使用，而 不希望在外部被访问到 
+ 私有属性 就是 对象 不希望公开的 属性 
+ 私有方法 就是 对象 不希望公开的 方法 
+定义方式
+
+在 定义属性或方法时，在 属性名或者方法名前 增加 两个下划线，定义的就是 私有 属性或方法
+ __secret(self) 
 """
